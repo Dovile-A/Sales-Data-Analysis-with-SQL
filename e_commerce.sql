@@ -67,7 +67,7 @@ UPDATE Sales s
 -- Step 5: Insights
 
 -- Total Revenue
--- Created View to showcase the total revenue from all sales
+-- Create and call View to showcase the total revenue from all sales
 
 CREATE VIEW total_revenue_eur AS
 	SELECT SUM(revenue_eur) AS total_revenue_eur
@@ -76,7 +76,7 @@ CREATE VIEW total_revenue_eur AS
 SELECT * FROM total_revenue_eur;
 
 -- Monthly revenue information
--- Created View to showcase the total revenue by month and year
+-- Create and call View to showcase the total revenue by month and year
 
 CREATE VIEW monthly_revenue AS
 SELECT 
@@ -95,7 +95,7 @@ ORDER BY
 SELECT * FROM monthly_revenue;
     
 -- Revenue of each product
--- Created View to showcase the revenue for each product, including the quantity sold
+-- Create and call View to showcase the revenue for each product, including the quantity sold
 
 CREATE VIEW product_revenue AS
 SELECT 
@@ -115,7 +115,7 @@ ORDER BY total_revenue_eur DESC;
 SELECT * FROM product_revenue;
 
 -- Average revenue per order
--- Created View to showcase the average revenue per order
+-- Create and call View to showcase the average revenue per order
 
 CREATE VIEW avg_order_revenue AS
 SELECT 
@@ -131,7 +131,7 @@ FROM (
 SELECT * FROM avg_order_revenue;
 
 -- Demographic information
--- Created View to showcase the order count by country and city of customers
+-- Create and call View to showcase the order count by country and city of customers
 
 CREATE VIEW demographic_info AS
 SELECT 
@@ -148,7 +148,7 @@ ORDER BY order_count DESC;
 SELECT * FROM demographic_info;
 
 -- Customers that spend the most
--- Created View to showcase the customers who spent the most on purchases
+-- Create and call View to showcase the customers who spent the most on purchases
 
 CREATE VIEW customers_ranked AS
 SELECT 
