@@ -22,7 +22,7 @@ CREATE TABLE Products (
     `mobile_device_brand` varchar(100) NOT NULL,
     `mobile_device_model` varchar(100) NOT NULL,
     `mobile_device_os` varchar(100) NOT NULL,
-    `price_€` decimal(10, 2) NOT NULL,
+    `price_eur` decimal(10, 2) NOT NULL,
     PRIMARY KEY (`id`)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
@@ -41,7 +41,7 @@ CREATE TABLE Sales (
     `order_id` int NOT NULL,
     `product_id` int NOT NULL,
     `quantity` int NOT NULL,
-    `revenue_€` decimal(10, 2) NOT NULL,
+    `revenue_eur` decimal(10, 2) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (order_id) REFERENCES Orders(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE
@@ -62,23 +62,27 @@ ALTER TABLE Orders
 
 UPDATE Sales s
     JOIN Products p ON s.product_id = p.id
-    SET s.revenue_€ = p.price_€ * s.quantity;
+    SET s.revenue_eur = p.price_eur * s.quantity;
 
 -- Step 5: Insights
 
 -- Total Revenue
--- Query to calculate the total revenue from all sales
+-- Created View to showcase the total revenue from all sales
 
-SELECT SUM(revenue_€) AS total_revenue_€
-FROM Sales;
+CREATE VIEW total_revenue_eur AS
+	SELECT SUM(revenue_eur) AS total_revenue_eur
+	FROM Sales;
+
+SELECT * FROM total_revenue_eur;
 
 -- Monthly revenue information
--- Query to retrieve the total revenue by month and year
+-- Created View to showcase the total revenue by month and year
 
+CREATE VIEW monthly_revenue AS
 SELECT 
     YEAR(STR_TO_DATE(o.order_date, '%d/%m/%Y')) AS year,
     MONTH(STR_TO_DATE(o.order_date, '%d/%m/%Y')) AS month,
-    SUM(s.revenue_€) AS total_revenue
+    SUM(s.revenue_eur) AS total_revenue
 FROM Sales s
 JOIN Orders o ON s.order_id = o.id
 GROUP BY 
@@ -87,40 +91,49 @@ GROUP BY
 ORDER BY 
     year ASC, 
     month ASC;
+
+SELECT * FROM monthly_revenue;
     
 -- Revenue of each product
--- Query to calculate the revenue for each product, including the quantity sold
+-- Created View to showcase the revenue for each product, including the quantity sold
 
+CREATE VIEW product_revenue AS
 SELECT 
-    p.mobile_device_brand,
     p.mobile_device_model,
+    p.mobile_device_brand,
     p.mobile_device_os,
     SUM(s.quantity) AS total_quantity_sold,
-    SUM(s.revenue_€) AS total_revenue_€
+    SUM(s.revenue_eur) AS total_revenue_eur
 FROM sales s
 JOIN products p ON s.product_id = p.id
 GROUP BY 
-    p.mobile_device_brand, 
-    p.mobile_device_model, 
+    p.mobile_device_model,
+    p.mobile_device_brand,
     p.mobile_device_os
-ORDER BY total_revenue_€ DESC;
-    
--- Average revenue per order
--- Query to calculate the average revenue per order
+ORDER BY total_revenue_eur DESC;
 
+SELECT * FROM product_revenue;
+
+-- Average revenue per order
+-- Created View to showcase the average revenue per order
+
+CREATE VIEW avg_order_revenue AS
 SELECT 
     ROUND(AVG(total_revenue), 2) AS average_revenue_per_order
 FROM (
     SELECT 
         order_id, 
-        SUM(revenue_€) AS total_revenue
+        SUM(revenue_eur) AS total_revenue
     FROM Sales
     GROUP BY order_id
 ) AS OrderRevenue;
 
--- Demographic information
--- Query to retrieve the order count by country and city of customers
+SELECT * FROM avg_order_revenue;
 
+-- Demographic information
+-- Created View to showcase the order count by country and city of customers
+
+CREATE VIEW demographic_info AS
 SELECT 
     c.country,
     c.city,
@@ -132,18 +145,18 @@ GROUP BY
     c.city
 ORDER BY order_count DESC;
 
--- Customers that spend the most
--- Query to find the customers who spent the most on purchases
+SELECT * FROM demographic_info;
 
+-- Customers that spend the most
+-- Created View to showcase the customers who spent the most on purchases
+
+CREATE VIEW customers_ranked AS
 SELECT 
-    c.first_name,
-    c.last_name,
+    CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
     c.e_mail,
-    c.address,
-    c.city,
-    c.country,
+    CONCAT(c.address, ', ', c.city, ', ', c.country) AS address,
     SUM(s.quantity) AS total_quantity_sold,
-    SUM(s.revenue_€) AS total_revenue_€
+    SUM(s.revenue_eur) AS total_revenue_eur
 FROM Sales s
 JOIN Orders o ON s.order_id = o.id
 JOIN Customers c ON o.customer_id = c.id
@@ -154,7 +167,10 @@ GROUP BY
     c.address,
     c.city,
     c.country
-ORDER BY total_revenue_€ DESC;
+ORDER BY 
+    total_revenue_eur DESC;
+    
+SELECT * FROM customers_ranked;
 
 
 
