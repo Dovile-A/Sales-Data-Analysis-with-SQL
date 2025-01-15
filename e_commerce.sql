@@ -56,7 +56,7 @@ ALTER TABLE Customers
 ALTER TABLE Orders
 	MODIFY `order_date` VARCHAR(10) DEFAULT '00/00/00'; 
     
--- Step 3: Populate Customers table with data from SQL files 'Customers', 'Products', 'Orders', 'Sales'
+-- Step 3: Populate tables with data from SQL files 'Customers', 'Products', 'Orders', 'Sales' (in repository provided as separate files).
 
 -- Step 4: Update Sales table with calculated revenue column
 
