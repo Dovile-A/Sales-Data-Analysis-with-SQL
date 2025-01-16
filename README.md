@@ -51,10 +51,21 @@ The database was designed using **MySQL** with `utf8mb4` character set for maxim
 
 2. Set up the database in MySQL by running the scripts in the following order:
 - Create Schema and Tables: `e_commerce.sql` sets up the database schema and creates the necessary tables.
-- Populate Tables with Data: Run these scripts to insert mock data into each table:
-  `customers.sql` — Populates the Customers table.
-  `products.sql` — Populates the Products table.
-  `orders.sql` — Populates the Orders table.
-  `sales.sql` — Populates the Sales table.
+- Populate Tables with Data: Run these scripts to insert mock data into each table:  
+  `customers.sql` — Populates the Customers table.  
+  `products.sql` — Populates the Products table.  
+  `orders.sql` — Populates the Orders table.  
+  `sales.sql` — Populates the Sales table.  
 (These files are provided as separate scripts in the repository.)
 - Once the data is populated, you can run the queries in e_commerce.sql (the main file) to replicate the analysis and generate insights such as total revenue, monthly revenue trends, and product-wise sales performance.
+
+## Tools Used
+**MySQL**: For database creation, management, and querying.  
+**mockaroo.com**: To generate sample data for the project.  
+**SQL Views**: To simplify complex queries and extract insights.  
+
+## Key Skills Demonstrated
+- Database design and normalization.  
+- SQL query writing, including joins, aggregations, and subqueries.  
+- Data cleaning and transformation.  
+- Analytical thinking and insight generation.  
