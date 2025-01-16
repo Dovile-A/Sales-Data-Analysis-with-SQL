@@ -54,7 +54,16 @@ ALTER TABLE Customers
     MODIFY COLUMN country VARCHAR(50);
 
 ALTER TABLE Orders
-	MODIFY `order_date` VARCHAR(10) DEFAULT '00/00/00'; 
+	MODIFY `order_date` VARCHAR(10) DEFAULT '00/00/00';
+
+ALTER TABLE Orders ADD COLUMN temp_order_date DATE;
+
+UPDATE Orders	
+	SET temp_order_date = STR_TO_DATE(order_date, '%d/%m/%Y');
+	
+ALTER TABLE Orders DROP COLUMN order_date;
+
+ALTER TABLE Orders CHANGE temp_order_date order_date DATE;
     
 -- Step 3: Populate tables with data from SQL files 'Customers', 'Products', 'Orders', 'Sales' (in repository provided as separate files).
 
@@ -148,7 +157,7 @@ ORDER BY order_count DESC;
 SELECT * FROM demographic_info;
 
 -- Customers that spend the most
--- Create and call View to showcase the customers who spent the most on purchases
+-- Create and callOrders View to showcase the customers who spent the most on purchases
 
 CREATE VIEW customers_ranked AS
 SELECT 
